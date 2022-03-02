@@ -13,6 +13,8 @@ SELECT "tb_trip"."CHASSIS" AS "CHASSIS",
   "tb_veh_model"."Veh_Model" AS "Veh_Model",
   "tb_veh_model"."VehicleIDNo" AS "VehicleIDNo",
   "tb_trip"."COUNTRY (OEM_TRIP_START)" AS "COUNTRY (OEM_TRIP_START)"
+  "tb_trip"."STATE_PROVINCE (OEM_TRIP_START)" AS "STATE_PROVINCE (OEM_TRIP_START)"
+
 FROM (
   SELECT 
     "OEM_TRIP_END"."TOTAL_VEH_DIST" - "OEM_TRIP_START"."TOTAL_VEH_DIST" as "DIS_DIFF",
@@ -29,9 +31,9 @@ FROM (
     RIGHT("OEM_TRIP_END"."VIN", 6) AS "CHASSIS"
   
   FROM "FLAT_SCHEMA"."OEM_TRIP_END" "OEM_TRIP_END"
-    sample(0.002) seed(1)
+    sample(0.01) seed(1) -- get the sample around 2000 lines
     INNER JOIN "FLAT_SCHEMA"."OEM_TRIP_START" "OEM_TRIP_START" 
-  sample(0.002) seed(1)
+  sample(0.01) seed(1)
   ON ("OEM_TRIP_END"."VIN" = "OEM_TRIP_START"."VIN")
   WHERE ("OEM_TRIP_END"."TOTAL_VEH_DIST" - "OEM_TRIP_START"."TOTAL_VEH_DIST" >= 0
       AND "Date_Diff" > 0)
@@ -53,3 +55,4 @@ WHERE "Daily_Miles" > 0
 AND "DIS_DIFF" < 500000
 AND ("COUNTRY (OEM_TRIP_START)" IS NOT NULL OR "COUNTRY (OEM_TRIP_START)" IN ('United States', 
 'Canada', 'Mexico'))
+AND "Veh_Model" IN ('T680', 'K270', 'K370') -- only look at truck model T680, K270/370
