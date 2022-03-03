@@ -12,7 +12,7 @@ SELECT "tb_trip"."CHASSIS" AS "CHASSIS",
   "tb_trip"."VIN (OEM_TRIP_START)" AS "VIN (OEM_TRIP_START)",
   "tb_veh_model"."Veh_Model" AS "Veh_Model",
   "tb_veh_model"."VehicleIDNo" AS "VehicleIDNo",
-  "tb_trip"."COUNTRY (OEM_TRIP_START)" AS "COUNTRY (OEM_TRIP_START)"
+  "tb_trip"."COUNTRY (OEM_TRIP_START)" AS "COUNTRY (OEM_TRIP_START)",
   "tb_trip"."STATE_PROVINCE (OEM_TRIP_START)" AS "STATE_PROVINCE (OEM_TRIP_START)"
 
 FROM (
@@ -28,7 +28,8 @@ FROM (
     "OEM_TRIP_END"."TRIP_IDL_TM" AS "Trip_IDL_Time",
     "OEM_TRIP_END"."TRIP_RUN_TM" AS "Trip_RUN_Time",
     "DIS_DIFF" / "Date_Diff" AS "Daily_Miles",
-    RIGHT("OEM_TRIP_END"."VIN", 6) AS "CHASSIS"
+    RIGHT("OEM_TRIP_END"."VIN", 6) AS "CHASSIS", 
+    "OEM_TRIP_START"."STATE_PROVINCE" AS "STATE_PROVINCE (OEM_TRIP_START)"
   
   FROM "FLAT_SCHEMA"."OEM_TRIP_END" "OEM_TRIP_END"
     sample(0.01) seed(1) -- get the sample around 2000 lines
